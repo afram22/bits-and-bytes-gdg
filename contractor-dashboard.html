@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contractor Dashboard - KaamSetu</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand-logo">
+        <span class="logo-icon">🔨</span>
+        KaamSetu
+      </a>
+
+      <button class="hamburger" id="hamburgerBtn" aria-label="Toggle navigation">☰</button>
+
+      <ul class="nav-menu" id="navMenu">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="contractor-dashboard.html" class="nav-link active" data-i18n="nav_my_jobs">My Jobs</a></li>
+        <li><a href="create-job.html" class="nav-link" data-i18n="nav_post_job">Post a Job</a></li>
+        <li><a href="contractor-profile.html" class="nav-link" data-i18n="nav_company_profile">Company Profile</a></li>
+        <li class="mobile-nav-actions">
+          <select class="lang-selector form-control" onchange="setLanguage(this.value)" style="padding:0.4rem 1.8rem 0.4rem 0.7rem;font-size:0.85rem;font-weight:600;">
+            <option value="en">🌐 English</option>
+            <option value="hi">🌐 हिंदी</option>
+          </select>
+          <a href="create-job.html" class="btn btn-accent btn-sm">+ Post a Job</a>
+          <a href="login.html" class="btn btn-outline btn-sm">Sign Out</a>
+        </li>
+      </ul>
+
+      <div class="nav-actions">
+        <select class="lang-selector form-control" onchange="setLanguage(this.value)" style="padding:0.4rem 1.8rem 0.4rem 0.7rem;font-size:0.85rem;font-weight:600;cursor:pointer;">
+          <option value="en">🌐 English</option>
+          <option value="hi">🌐 हिंदी</option>
+        </select>
+        <a href="create-job.html" class="btn btn-accent btn-sm">➕ Post New Job</a>
+        <a href="contractor-profile.html" class="btn btn-outline btn-sm" id="navContractorProfile">🏗️ Apex Infra</a>
+        <a href="login.html" class="btn btn-outline btn-sm">Logout</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="container">
+      
+      <!-- Contractor Header Banner -->
+      <div style="background: var(--white); border: 1px solid var(--slate-200); border-radius: var(--radius-lg); padding: 1.75rem; margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div style="display: flex; align-items: center; gap: 1.25rem;">
+          <div style="width: 64px; height: 64px; border-radius: var(--radius-md); background: var(--accent-light); color: var(--accent-hover); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 700;">
+            🏗️
+          </div>
+          <div>
+            <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+              <h2 style="margin: 0;" id="contractorCompanyHeading">Apex Infrastructure Ltd.</h2>
+              <span class="badge badge-accent">Verified Builder</span>
+              <span class="badge badge-success">Active Sites: 4</span>
+            </div>
+            <p style="color: var(--slate-600); margin: 0.25rem 0 0; font-size: 0.9rem;">
+              Contact Person: <strong id="contractorContactPerson">Vikram Sharma (Head Contractor)</strong> &bull; Location: <strong>Delhi NCR</strong>
+            </p>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 0.75rem;">
+          <a href="create-job.html" class="btn btn-accent btn-sm">
+            ➕ Post New Work Requirement
+          </a>
+          <a href="contractor-profile.html" class="btn btn-outline btn-sm">
+            View Public Profile
+          </a>
+        </div>
+      </div>
+
+      <!-- Quick Metrics Overview -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon amber">📢</div>
+          <div>
+            <div class="stat-value" id="statPostedJobs">3</div>
+            <div class="stat-label">Active Job Openings</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon blue">📥</div>
+          <div>
+            <div class="stat-value" id="statTotalApplicants">5</div>
+            <div class="stat-label">Worker Applications</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon green">👷</div>
+          <div>
+            <div class="stat-value">8 / 10</div>
+            <div class="stat-label">Site Workers Staffed</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon blue">📍</div>
+          <div>
+            <div class="stat-value">Sector 62</div>
+            <div class="stat-label">Current Main Site</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Navigation -->
+      <div class="tab-group">
+        <button class="tab-btn active" id="tabPostedJobs" onclick="showContractorTab('jobs')">
+          📋 My Posted Work Requirements (<span id="postedJobsCount">0</span>)
+        </button>
+        <button class="tab-btn" id="tabApplicants" onclick="showContractorTab('applicants')">
+          👥 Received Worker Applications (<span id="applicantsCount">0</span>)
+        </button>
+      </div>
+
+      <!-- Tab 1: Posted Jobs -->
+      <div id="viewPostedJobs">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <p style="color: var(--slate-600); margin: 0; font-size: 0.9rem;">
+            Real-time status of your active daily-wage requirements on KaamSetu.
+          </p>
+          <a href="create-job.html" class="btn btn-accent btn-sm">Post Another Job</a>
+        </div>
+
+        <div class="grid" style="gap: 1rem;" id="contractorJobsList">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <!-- Tab 2: Received Worker Applications -->
+      <div id="viewApplicants" style="display: none;">
+        <div class="card" style="padding: 0; overflow: hidden;">
+          <div style="padding: 1.25rem; border-bottom: 1px solid var(--slate-200); background: var(--slate-50); display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <h3 style="margin: 0;">Skilled Worker Applications</h3>
+              <p style="color: var(--slate-600); margin: 0.25rem 0 0; font-size: 0.85rem;">
+                Review verified workers who applied for your sites. Confirm workers with 1 click.
+              </p>
+            </div>
+            <span class="badge badge-primary">Direct Contact Enabled</span>
+          </div>
+
+          <div id="applicantsTableContainer" style="padding: 1.25rem;">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container text-center">
+      <div class="footer-bottom">
+        <p>KaamSetu &bull; Built for Hackathon MVP Demonstration &bull; Frontend UI by Member 1</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    async function loadContractorDashboard() {
+      const user = (window.KaamSetuAPI && window.KaamSetuAPI.getUser()) || getCurrentUser();
+      if (user) {
+        const companyName = user.company_name || user.company || user.name || 'Apex Infrastructure Ltd.';
+        const personName = user.contact_person || user.name || 'Contractor';
+        
+        const heading = document.getElementById('contractorCompanyHeading');
+        if (heading) heading.textContent = companyName;
+
+        const personEl = document.getElementById('contractorContactPerson');
+        if (personEl) personEl.textContent = `${personName} (Head Contractor)`;
+
+        const navBtn = document.getElementById('navContractorProfile');
+        if (navBtn) navBtn.textContent = `🏗️ ${companyName}`;
+      }
+
+      if (window.KaamSetuAPI) {
+        const jobsRes = await window.KaamSetuAPI.getContractorJobs();
+        if (jobsRes.ok && jobsRes.data && jobsRes.data.jobs) {
+          const formattedJobs = jobsRes.data.jobs.map(j => ({
+            id: j.id,
+            title: j.title,
+            category: j.category,
+            workersNeeded: j.workers_needed || j.workersNeeded || 1,
+            dailyWage: j.daily_wage || j.dailyWage || 800,
+            duration: j.duration || '1 Day',
+            startDate: j.start_date || j.startDate || 'Immediate',
+            location: j.location,
+            urgent: Boolean(j.urgent)
+          }));
+          renderContractorJobs(formattedJobs);
+        } else {
+          renderContractorJobs(getJobs());
+        }
+
+        const assignRes = await window.KaamSetuAPI.getContractorAssignments();
+        if (assignRes.ok && assignRes.data && assignRes.data.assignments) {
+          const formattedApps = assignRes.data.assignments.map(a => ({
+            id: a.id,
+            jobId: a.job_id || a.jobId,
+            jobTitle: a.job_title || a.jobTitle || 'Site Work',
+            workerName: a.worker_name || a.workerName || 'Worker',
+            workerTrade: a.worker_trade || a.workerTrade || 'Masonry',
+            workerPhone: a.worker_phone || a.workerPhone || '+91 98765 43210',
+            wage: a.agreed_wage || a.wage || 800,
+            status: a.assignment_status || a.status || 'Assigned',
+            rating: '4.8',
+            appliedDate: 'Recently'
+          }));
+          renderContractorApplicantsFromData(formattedApps);
+          return;
+        }
+      } else {
+        renderContractorJobs(getJobs());
+      }
+
+      renderContractorApplicants();
+    }
+
+    function renderContractorApplicantsFromData(apps) {
+      const container = document.getElementById('applicantsTableContainer');
+      const badge = document.getElementById('applicantsCount');
+      const stat = document.getElementById('statTotalApplicants');
+
+      badge.textContent = apps.length;
+      if (stat) stat.textContent = apps.length;
+
+      if (apps.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 2rem;">
+            <p style="color: var(--slate-600);">No worker applications received yet.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = apps.map(app => `
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border-bottom: 1px solid var(--slate-200); flex-wrap: wrap; gap: 1rem;">
+          <div style="display: flex; align-items: center; gap: 1rem;">
+            <div style="width: 48px; height: 48px; border-radius: 50%; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 700;">
+              👷
+            </div>
+            <div>
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <h4 style="margin: 0;">${app.workerName}</h4>
+                <span class="badge badge-primary">${app.workerTrade}</span>
+                <span class="badge badge-success">⭐ ${app.rating}</span>
+              </div>
+              <p style="color: var(--slate-600); font-size: 0.85rem; margin: 0.25rem 0 0;">
+                Applied for: <strong>${app.jobTitle}</strong> &bull; Applied: ${app.appliedDate}
+              </p>
+            </div>
+          </div>
+
+          <div style="display: flex; align-items: center; gap: 1rem;">
+            <div style="text-align: right;">
+              <div style="font-weight: 700; color: var(--primary);">₹${app.wage}/day</div>
+              <span style="font-size: 0.75rem; color: var(--slate-600);">${app.workerPhone}</span>
+            </div>
+
+            <div style="display: flex; gap: 0.5rem;" id="actions-${app.id}">
+              ${app.status === 'Accepted' ? `
+                <span class="badge badge-success" style="font-size: 0.85rem; padding: 0.5rem 0.85rem;">✓ Hired & Confirmed</span>
+                <a href="tel:${app.workerPhone}" class="btn btn-outline btn-sm">📞 Call Worker</a>
+              ` : `
+                <button class="btn btn-success btn-sm" onclick="acceptWorker('${app.id}')">
+                  ✓ Accept & Hire
+                </button>
+                <a href="tel:${app.workerPhone}" class="btn btn-outline btn-sm">📞 Call</a>
+              `}
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderContractorApplicants() {
+      const apps = getApplications();
+      renderContractorApplicantsFromData(apps);
+    }
+
+    async function acceptWorker(appId) {
+      if (window.KaamSetuAPI) {
+        const res = await window.KaamSetuAPI.updateContractorAssignmentStatus(appId, 'Accepted');
+        if (res.ok) {
+          showToast(`Worker application has been accepted and confirmed!`, 'success');
+          loadContractorDashboard();
+          return;
+        } else if (res.status !== 0) {
+          showToast(res.data?.message || 'Failed to accept worker.', 'info');
+          return;
+        }
+      }
+
+      const apps = getApplications();
+      const target = apps.find(a => a.id === appId);
+      if (target) {
+        target.status = 'Accepted';
+        localStorage.setItem('kaamsetu_applications', JSON.stringify(apps));
+        showToast(`Worker ${target.workerName} has been accepted and confirmed for the site!`, 'success');
+        renderContractorApplicants();
+      }
+    }
+
+    function showContractorTab(tab) {
+      const tabJobs = document.getElementById('tabPostedJobs');
+      const tabApplicants = document.getElementById('tabApplicants');
+      const viewJobs = document.getElementById('viewPostedJobs');
+      const viewApplicants = document.getElementById('viewApplicants');
+
+      if (tab === 'jobs') {
+        tabJobs.classList.add('active');
+        tabApplicants.classList.remove('active');
+        viewJobs.style.display = 'block';
+        viewApplicants.style.display = 'none';
+      } else {
+        tabApplicants.classList.add('active');
+        tabJobs.classList.remove('active');
+        viewJobs.style.display = 'none';
+        viewApplicants.style.display = 'block';
+        renderContractorApplicants();
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadContractorDashboard();
+    });
+  </script>
+</body>
+</html>
